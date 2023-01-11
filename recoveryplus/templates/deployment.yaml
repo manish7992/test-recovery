@@ -23,7 +23,7 @@ spec:
         # add root password
         envFrom:
           - secretRef:
-              name: wp-db-secrets
+              name: backend-secrets
         ports:
           - containerPort: 3306
         volumeMounts:
