@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  name: nginx
+  name: manish8757/rancher:recover
   pullPolicy: IfNotPresent
   tag: ""
 
