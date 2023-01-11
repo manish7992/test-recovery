@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "recoveryplus.fullname" . }}
+  labels:
+    {{- include "recoveryplus.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "recoveryplus.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "recoveryplus.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: DB-HOST
+              value: mysql-service.default.svc.cluster.local
+            - name: USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: USERNAME
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: PASSWORD
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
