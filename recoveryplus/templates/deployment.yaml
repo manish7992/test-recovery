@@ -1,45 +1,35 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: ReplicaSet
 metadata:
-  name: {{ include "recoveryplus.fullname" . }}
+  name: mysql
   labels:
-    {{- include "recoveryplus.labels" . | nindent 4 }}
+    app: mysql
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: 1
   selector:
     matchLabels:
-      {{- include "recoveryplus.selectorLabels" . | nindent 6 }}
+      app: mysql
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "recoveryplus.selectorLabels" . | nindent 8 }}
+        app: mysql
     spec:
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          env:
-            - name: DB-HOST
-              value: mysql-service.default.svc.cluster.local
-            - name: USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: USERNAME
-            - name: PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: PASSWORD
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+      - name: database
+        image: mysql:5.7
+        args:
+          # mount volume
+          - "--ignore-db-dir=lost+found"
+        # add root password
+        envFrom:
+          - secretRef:
+              name: wp-db-secrets
+        ports:
+          - containerPort: 3306
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mysql-volume
