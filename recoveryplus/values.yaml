@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  name: manish8757/rancher:recover
+  name: manish8757/k8s:recover-plus
   pullPolicy: IfNotPresent
   tag: ""
 
