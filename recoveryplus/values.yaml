@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  name: manish8757/k8s:rp2
+  name: manish8757/k8s:rp3
   pullPolicy: IfNotPresent
   tag: ""
 
@@ -33,7 +33,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 8081
 
 ingress:
