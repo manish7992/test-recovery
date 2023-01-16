@@ -26,7 +26,7 @@ spec:
               protocol: TCP
           env:
             - name: PROFILE
-              value: "staging"
+              value: "dev"
             - name: DB-HOST
               value: mysql-service.default.svc.cluster.local
             - name: USERNAME
