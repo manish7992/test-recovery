@@ -25,6 +25,8 @@ spec:
               containerPort: 8081
               protocol: TCP
           env:
+            - name: PROFILE
+              value: "staging"
             - name: DB-HOST
               value: mysql-service.default.svc.cluster.local
             - name: USERNAME
