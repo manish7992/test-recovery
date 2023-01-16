@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  name: manish8757/k8s:rp1
+  name: manish8757/k8s:rp2
   pullPolicy: IfNotPresent
   tag: ""
 
