@@ -4,6 +4,8 @@ metadata:
   name: mysql
   labels:
     app: mysql
+  annotations:
+    runterrascan.io/minseverity: Low
 spec:
   replicas: 1
   selector:
