@@ -4,6 +4,8 @@ metadata:
   name: {{ include "recoveryplus.fullname" . }}
   labels:
     {{- include "recoveryplus.labels" . | nindent 4 }}
+  annotations:
+    runterrascan.io/minseverity: Low
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
