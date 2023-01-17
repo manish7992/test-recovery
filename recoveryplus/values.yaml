@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  name: manish8757/k8s:rp3
+  name: manish8757/k8s:fd02c5c42131123e8127881d32f15a45a3e103d1
   pullPolicy: IfNotPresent
   tag: ""
 
